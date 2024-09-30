@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Stack;
@@ -93,9 +96,16 @@ public class Queue<Item> implements Iterable<Item> {
         int errorCount = 0;
         int memoryWarnings = 0;
 
-        while (!StdIn.isEmpty()) {
-            String logEntry = StdIn.readLine();
-            queue.enqueue(logEntry);
+        // Specify the path to your CSV file
+        String csvFile = "src/log-data.csv";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                queue.enqueue(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         while (!queue.isEmpty()) {
@@ -118,14 +128,14 @@ public class Queue<Item> implements Iterable<Item> {
             }
         }
 
-        StdOut.println("INFO logged: " + infoCount);
-        StdOut.println("WARN logged: " + warnCount);
-        StdOut.println("ERROR logged: " + errorCount);
-        StdOut.println("Memory warnings logged: " + memoryWarnings);
+        System.out.println("INFO logged: " + infoCount);
+        System.out.println("WARN logged: " + warnCount);
+        System.out.println("ERROR logged: " + errorCount);
+        System.out.println("Memory warnings logged: " + memoryWarnings);
 
-        StdOut.println("100 Recent Errors:");
+        System.out.println("100 Recent Errors:");
         for (String error : recentErrors) {
-            StdOut.println(error);
+            System.out.println(error);
         }
     }
 }
